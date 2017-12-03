@@ -37,6 +37,6 @@ public class Class1 {
 //       }
 
        TextPart textPart = new TextPart(TextPartType.Root, text);
-
+       textPart.testowa();
    }
 }

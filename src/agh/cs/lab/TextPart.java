@@ -4,6 +4,7 @@ import com.sun.xml.internal.bind.v2.TODO;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.xml.soap.Text;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,10 +22,29 @@ public class TextPart {
     private Map<String, TextPart> children = new LinkedHashMap<>();
 
 
-    public TextPart(TextPartType textPartType, String content) {
+    public TextPart (TextPartType textPartType, String content) {
         this.textPartType = textPartType;
-        parseContent(content);
+        try {
+            parseContent(content);
+        }
+        catch (Exception ex) {
 
+        }
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void testowa() {
+        for (TextPart part : children.values()) {
+            System.out.println(part.getTitle());
+        }
     }
 
     public String getContent() {
@@ -32,22 +52,27 @@ public class TextPart {
     }
 
     private void parseContent(String content) {
-        //Wycina typ, numer i tytuł
-        //TODO
-        //Bez wycinania nazwy nie mamy hasha do rozróżniania elementów w hashset
+
+        if(textPartType!=TextPartType.Root) {
+            parseName(content);
+            parseTitle(content);
+        }
+
+
 
 
 
         //Parsuje po następnym typie
         TextPartType type = this.textPartType;
         Matcher m;
+        Pattern r;
 
-        if(type != TextPartType.Chapter) {
-            do{
+        if (type != TextPartType.Chapter) {
+            do {
                 type = type.next();
-                Pattern r = Pattern.compile(RegularExpressions.getTextPartRegularExpression(type));
+                r = Pattern.compile(RegularExpressions.getTextPartRegularExpression(type));
                 m = r.matcher(content);
-            }while (!m.find() && type != TextPartType.Article);
+            } while (!m.find() && type.next() != TextPartType.END);
 
             m.reset();
 
@@ -59,7 +84,7 @@ public class TextPart {
 
             //Wrzucanie listy do hashmapy -> bo skoro już sparsowane to mamy klucz
 
-            for(TextPart part : nextParts) {
+            for (TextPart part : nextParts) {
                 children.put(part.name, part);
             }
 
@@ -69,12 +94,34 @@ public class TextPart {
         //Zawartość tego 'węzła' to pozostałość po wycinkach
         this.content = content;
 
-        for(Object part : children.values().toArray()) {
+        for (Object part : children.values().toArray()) {
             TextPart tPart = (TextPart) part;
-            System.out.println(tPart.getContent());
+            //System.out.println(tPart.getContent());
         }
 
 
+    }
+
+    private void parseName(String content) {
+        Matcher m;
+        Pattern r = Pattern.compile(RegularExpressions.getTextPartNameRegularExpression(this.textPartType));
+        m = r.matcher(content);
+
+        m.find();
+        this.name = m.group(0);
+
+        content = m.replaceAll("");
+    }
+
+    private void parseTitle(String content) {
+        Matcher m;
+        Pattern r = Pattern.compile(RegularExpressions.getTextPartTitleRegularExpression(this.textPartType));
+        m = r.matcher(content);
+
+        m.find();
+        this.title = m.group(0);
+
+        content = m.replaceAll("");
     }
 
 }
