@@ -1,10 +1,6 @@
 package agh.cs.lab;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Class1 {
    public static void main(String args[]) throws IOException{
@@ -12,7 +8,7 @@ public class Class1 {
        FileInputStream in = null;
        FileOutputStream out = null;
        String text = new String();
-       try (BufferedReader br = new BufferedReader(new FileReader("E:\\uokik.txt"))) {
+       try (BufferedReader br = new BufferedReader(new FileReader("E:\\konstytucja.txt"))) {
            String line;
            while ((line = br.readLine()) != null) {
               text = text  + "\n" + line;
@@ -20,10 +16,6 @@ public class Class1 {
            }
        }
 
-//       Writer writer = new BufferedWriter(new OutputStreamWriter(
-//               new FileOutputStream("filename.txt"), "utf-8"));
-//       writer.write(text);
-//
 //       // Create a Pattern object
 //       Pattern r = Pattern.compile("((Rozdział|DZIAŁ)( [XIVL]{1,})([\\S\\s]*?)(?=\\2|$))");
 //

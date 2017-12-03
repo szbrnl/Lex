@@ -1,10 +1,5 @@
 package agh.cs.lab;
 
-import com.sun.xml.internal.bind.v2.TODO;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import javax.xml.soap.Text;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,20 +12,19 @@ public class TextPart {
 
     private String name;    //np ROZDZIAL III
     private String title;   //np. ŹRÓDŁA PRAWA
-    private String content;
+    private String content; //to co zostało - np preambuła
 
     private Map<String, TextPart> children = new LinkedHashMap<>();
 
 
-    public TextPart (TextPartType textPartType, StringBuilder content) {
+    public TextPart(TextPartType textPartType, StringBuilder content) {
         this.textPartType = textPartType;
-        try {
-            parseContent(content);
-        }
-        catch (Exception ex) {
+        parseContent(content);
 
-        }
+    }
 
+    public String getContent() {
+        return content;
     }
 
     public String getName() {
@@ -47,18 +41,13 @@ public class TextPart {
         }
     }
 
-    public String getContent() {
-        return content;
-    }
 
     private void parseContent(StringBuilder content) {
 
-        if(this.textPartType!=TextPartType.Root) {
+        if (this.textPartType != TextPartType.Root) {
             parseName(content);
             parseTitle(content);
         }
-        //System.out.println(content);
-
 
 
         //Parsuje po następnym typie
@@ -66,7 +55,8 @@ public class TextPart {
         Matcher m;
         Pattern r;
 
-        if (type != TextPartType.Chapter) {
+        //Sprawdz czy to już nie jest ostani rodzaj 'węzła'
+        if (type.next() != TextPartType.END) {
             do {
                 type = type.next();
                 r = Pattern.compile(RegularExpressions.getTextPartRegularExpression(type));
@@ -82,23 +72,15 @@ public class TextPart {
             }
 
             //Wrzucanie listy do hashmapy -> bo skoro już sparsowane to mamy klucz
-
             for (TextPart part : nextParts) {
                 children.put(part.name, part);
             }
 
             //Wycinamy podelementy
-
             content = new StringBuilder(m.replaceAll(""));
         }
         //Zawartość tego 'węzła' to pozostałość po wycinkach
         this.content = content.toString();
-
-        for (Object part : children.values().toArray()) {
-            TextPart tPart = (TextPart) part;
-            //System.out.println(tPart.getContent());
-        }
-
 
     }
 
@@ -110,10 +92,7 @@ public class TextPart {
         m.find();
         this.name = m.group(0);
 
-
-
         content.replace(m.start(), m.end(), "");
-        //System.out.println(content);
     }
 
     private void parseTitle(StringBuilder content) {

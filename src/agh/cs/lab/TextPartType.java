@@ -6,11 +6,11 @@ public enum TextPartType {
     private static TextPartType[] textPartTypesValues = TextPartType.values();
 
     TextPartType next() {
-        return textPartTypesValues[(this.ordinal()+1)%textPartTypesValues.length];
+        return textPartTypesValues[this.ordinal()+1];
     }
 
     TextPartType previous() {
-        return textPartTypesValues[(this.ordinal()-1)%textPartTypesValues.length];
+        return textPartTypesValues[this.ordinal()-1];
     }
 
 }
