@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 public class Class1 {
    public static void main(String args[]) throws IOException{
+
        FileInputStream in = null;
        FileOutputStream out = null;
        String text = new String();
@@ -19,21 +20,23 @@ public class Class1 {
            }
        }
 
-       Writer writer = new BufferedWriter(new OutputStreamWriter(
-               new FileOutputStream("filename.txt"), "utf-8"));
-       writer.write(text);
+//       Writer writer = new BufferedWriter(new OutputStreamWriter(
+//               new FileOutputStream("filename.txt"), "utf-8"));
+//       writer.write(text);
+//
+//       // Create a Pattern object
+//       Pattern r = Pattern.compile("((Rozdział|DZIAŁ)( [XIVL]{1,})([\\S\\s]*?)(?=\\2|$))");
+//
+//       // Now create matcher object.
+//       Matcher m = r.matcher(text);
+//
+//
+//       while(m.find()) {
+//           System.out.println(m.group(0));
+//           System.out.println("------");
+//       }
 
-       // Create a Pattern object
-       Pattern r = Pattern.compile("(Rozdział|DZIAŁ)([\\S\\s]*?(?=Rozdział|DZIAŁ|$))");
-
-       // Now create matcher object.
-       Matcher m = r.matcher(text);
-
-
-       while(m.find()) {
-           System.out.println(m.group(0));
-           System.out.println("------");
-       }
+       TextPart textPart = new TextPart(TextPartType.Root, text);
 
    }
 }
