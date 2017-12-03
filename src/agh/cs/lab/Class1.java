@@ -12,7 +12,7 @@ public class Class1 {
        FileInputStream in = null;
        FileOutputStream out = null;
        String text = new String();
-       try (BufferedReader br = new BufferedReader(new FileReader("E:\\konstytucja.txt"))) {
+       try (BufferedReader br = new BufferedReader(new FileReader("E:\\uokik.txt"))) {
            String line;
            while ((line = br.readLine()) != null) {
               text = text  + "\n" + line;
@@ -36,7 +36,7 @@ public class Class1 {
 //           System.out.println("------");
 //       }
 
-       TextPart textPart = new TextPart(TextPartType.Root, text);
+       TextPart textPart = new TextPart(TextPartType.Root, new StringBuilder(text));
        textPart.testowa();
    }
 }

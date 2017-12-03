@@ -22,7 +22,7 @@ public class TextPart {
     private Map<String, TextPart> children = new LinkedHashMap<>();
 
 
-    public TextPart (TextPartType textPartType, String content) {
+    public TextPart (TextPartType textPartType, StringBuilder content) {
         this.textPartType = textPartType;
         try {
             parseContent(content);
@@ -51,14 +51,13 @@ public class TextPart {
         return content;
     }
 
-    private void parseContent(String content) {
+    private void parseContent(StringBuilder content) {
 
-        if(textPartType!=TextPartType.Root) {
+        if(this.textPartType!=TextPartType.Root) {
             parseName(content);
             parseTitle(content);
         }
-
-
+        //System.out.println(content);
 
 
 
@@ -79,7 +78,7 @@ public class TextPart {
             List<TextPart> nextParts = new LinkedList<>();
 
             while (m.find()) {
-                nextParts.add(new TextPart(type, m.group(0)));
+                nextParts.add(new TextPart(type, new StringBuilder(m.group(0))));
             }
 
             //Wrzucanie listy do hashmapy -> bo skoro już sparsowane to mamy klucz
@@ -89,10 +88,11 @@ public class TextPart {
             }
 
             //Wycinamy podelementy
-            content = m.replaceAll("");
+
+            content = new StringBuilder(m.replaceAll(""));
         }
         //Zawartość tego 'węzła' to pozostałość po wycinkach
-        this.content = content;
+        this.content = content.toString();
 
         for (Object part : children.values().toArray()) {
             TextPart tPart = (TextPart) part;
@@ -102,7 +102,7 @@ public class TextPart {
 
     }
 
-    private void parseName(String content) {
+    private void parseName(StringBuilder content) {
         Matcher m;
         Pattern r = Pattern.compile(RegularExpressions.getTextPartNameRegularExpression(this.textPartType));
         m = r.matcher(content);
@@ -110,10 +110,13 @@ public class TextPart {
         m.find();
         this.name = m.group(0);
 
-        content = m.replaceAll("");
+
+
+        content.replace(m.start(), m.end(), "");
+        //System.out.println(content);
     }
 
-    private void parseTitle(String content) {
+    private void parseTitle(StringBuilder content) {
         Matcher m;
         Pattern r = Pattern.compile(RegularExpressions.getTextPartTitleRegularExpression(this.textPartType));
         m = r.matcher(content);
@@ -121,7 +124,7 @@ public class TextPart {
         m.find();
         this.title = m.group(0);
 
-        content = m.replaceAll("");
+        content.replace(m.start(), m.end(), "");
     }
 
 }
