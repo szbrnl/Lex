@@ -16,6 +16,15 @@ public class Class1 {
            }
        }
 
+       //TODO Content nie moze być stringiem -> jakaś lista wierszy, uprzednio pozbawiona znaków nowej linii i myślników na końcach?
+
+       //TODO Usuwanie śmieci z tekstu
+
+       //TODO Osobna klasa parser?
+
+       //TODO Pozostałe regexy
+
+
 //       // Create a Pattern object
 //       Pattern r = Pattern.compile("((Rozdział|DZIAŁ)( [XIVL]{1,})([\\S\\s]*?)(?=\\2|$))");
 //

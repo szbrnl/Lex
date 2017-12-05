@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class RegularExpressions {
 
+    private RegularExpressions() {}
+
     private static Map<TextPartType, String> regularExpressions = new HashMap<>();
 
     static {
