@@ -1,9 +1,7 @@
 package agh.cs.lab;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import javax.xml.soap.Text;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +12,7 @@ public class TextPart {
     private String title;   //np. ŹRÓDŁA PRAWA
     private String content; //to co zostało - np preambuła
 
-    private Map<String, TextPart> children = new LinkedHashMap<>();
+    private Set<TextPart> children = new LinkedHashSet<>();
 
 
     public TextPart(TextPartType textPartType, StringBuilder content) {
@@ -30,7 +28,7 @@ public class TextPart {
         //Jako rozdzielenie contentu na kolejne linijki
     }
 
-    public void SetChildren(Map<String,TextPart> children) {
+    public void SetChildren(Set<TextPart> children) {
         this.children = children;
     }
 
@@ -47,9 +45,10 @@ public class TextPart {
     }
 
     public void testowa() {
-        for (TextPart part : children.values()) {
+
+        for (TextPart part : children) {
             System.out.println(part.name + "  " + part.title);
-            for(TextPart part1 : part.children.values()) {
+            for(TextPart part1 : part.children) {
                 System.out.println("\t\t"+part1.getName()+" "+part1.getTitle());
             }
         }
@@ -101,9 +100,7 @@ public class TextPart {
             }
 
             //Wrzucanie listy do hashmapy -> bo skoro już sparsowane to mamy klucz
-            for (TextPart part : nextParts) {
-                children.put(part.name, part);
-            }
+            children.addAll(nextParts);
 
             //Wycinamy podelementy
             content = new StringBuilder(m.replaceAll(""));
@@ -135,4 +132,22 @@ public class TextPart {
         content.replace(m.start(), m.end(), "");
     }
 
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TextPart textPart = (TextPart) o;
+        return textPartType == textPart.textPartType &&
+                Objects.equals(name, textPart.name) &&
+                Objects.equals(title, textPart.title) &&
+                Objects.equals(content, textPart.content) &&
+                Objects.equals(children, textPart.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(textPartType, name, title, content, children);
+    }
 }
