@@ -37,6 +37,9 @@ public class TextPartTypeClassTests {
 
         type = type.next();
         assertEquals(TextPartType.Chapter, type.next());
+
+        type = type.next();
+        //assertEquals(TextPartType.CapitalLetters, type.next());
     }
 
 }
