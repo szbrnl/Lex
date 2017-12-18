@@ -1,93 +1,126 @@
 package agh.cs.lab;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextParser {
+    private final TextPartType textPartType;
+    private StringBuilder content = new StringBuilder();
+    private StringBuilder name = new StringBuilder();
+    private StringBuilder title = new StringBuilder();
+    private Set<TextPart> children = new LinkedHashSet<>();
 
-    private StringBuilder text;
-    private TextPartType textPartType;
-
-    public TextParser(StringBuilder text) {
-        this.text = text;
-        this.textPartType = TextPartType.Root;
+    public TextParser(TextPartType textPartType, StringBuilder text) {
+        this.textPartType = textPartType;
+        parseContent(text);
     }
 
-    public TextPart Parse() throws UnsupportedOperationException {
-        TextPart root = new TextPart(this.textPartType, new StringBuilder("  "));
-
-        //Parsujemy całość
-
-
-        return root;
+    public String getName() {
+        return name.toString();
     }
 
+    public String getTitle() {
+        return title.toString();
+    }
 
-//    private void parseName(StringBuilder content) {
-//        Matcher m;
-//        Pattern r = Pattern.compile(RegularExpressions.getTextPartNameRegularExpression(this.textPartType));
-//        m = r.matcher(content);
-//
-//        m.find();
-//        this.name = m.group(0);
-//
-//        content.replace(m.start(), m.end(), "");
-//    }
-//
-//    private void parseTitle(StringBuilder content) {
-//        Matcher m;
-//        Pattern r = Pattern.compile(RegularExpressions.getTextPartTitleRegularExpression(this.textPartType));
-//        m = r.matcher(content);
-//
-//        m.find();
-//        this.title = m.group(0);
-//
-//        content.replace(m.start(), m.end(), "");
-//    }
+    public String getContent() {
+        return content.toString();
+    }
 
-//    private void parseContent(StringBuilder content) {
-//
-//        if (this.textPartType != TextPartType.Root) {
-//            parseName(content);
-//            parseTitle(content);
-//        }
-//
-//
-//        //Parsuje po następnym typie
-//        TextPartType type = this.textPartType;
-//        Matcher m;
-//        Pattern r;
-//
-//        //Sprawdz czy to już nie jest ostani rodzaj 'węzła'
-//        if (type.next() != TextPartType.END) {
-//            do {
-//                type = type.next();
-//                r = Pattern.compile(RegularExpressions.getTextPartRegularExpression(type));
-//                m = r.matcher(content);
-//            } while (!m.find() && type.next() != TextPartType.END);
-//
-//            m.reset();
-//
-//            List<TextPart> nextParts = new LinkedList<>();
-//
-//            while (m.find()) {
-//                nextParts.add(new TextPart(type, new StringBuilder(m.group(0))));
-//            }
-//
-//            //Wrzucanie listy do hashmapy -> bo skoro już sparsowane to mamy klucz
-//            for (TextPart part : nextParts) {
-//                children.put(part.name, part);
-//            }
-//
-//            //Wycinamy podelementy
-//            content = new StringBuilder(m.replaceAll(""));
-//        }
-//        //Zawartość tego 'węzła' to pozostałość po wycinkach
-//        this.content = content.toString();
-//
-//    }
+    public Set<TextPart> getChildren() {
+        return children;
+    }
+
+    private void parseContent(StringBuilder text) {
+
+        if (this.textPartType != TextPartType.Root) {
+
+            try {
+                parseName(text);
+            } catch (IllegalStateException ex) {
+                //Could not find name, so it does not exist
+                this.name = new StringBuilder("");
+            }
+
+            try {
+                parseTitle(text);
+            } catch (IllegalStateException ex) {
+                //Could not find title, so it does not exist
+                this.title = new StringBuilder("");
+            }
+
+        }
 
 
+        //Parsuje po następnym typie
+        TextPartType type = this.textPartType;
+        Matcher m;
+        Pattern r;
+
+        //Sprawdz czy to już nie jest ostani rodzaj 'węzła'
+        if (type.next() != TextPartType.END) {
+            do {
+                type = type.next();
+                r = Pattern.compile(type.getTextPartRegularExpression());
+                m = r.matcher(text);
+            } while (!m.find() && type.next() != TextPartType.END);
+
+            m.reset();
+
+
+
+            List<TextPart> nextParts = new LinkedList<TextPart>();
+
+            while (m.find()) {
+                nextParts.add(new TextPart(type, new StringBuilder(m.group(0))));
+            }
+
+            //Wycinamy podelementy
+            text = new StringBuilder(m.replaceAll(""));
+
+            //Sprawdzamy, czy w tym co zostało nie ma czegoś do sparsowania
+            if(type.next() != TextPartType.END) {
+                TextPartType nextType = type.next();
+                r = Pattern.compile(nextType.getTextPartRegularExpression());
+                m = r.matcher(text);
+                if (m.find()) {
+                    m.reset();
+                    children.add(new TextPart(type, text));
+                    children.forEach(p -> System.out.println(p.getName()));
+                }
+            }
+
+            //Wrzucanie listy do hashset -> bo skoro już sparsowane to mamy klucz
+            children.addAll(nextParts);
+
+            //Content to pozostałości po wycinkach
+            this.content = text;
+        }
+    }
+
+    private void parseName(StringBuilder text) {
+        Matcher m;
+        Pattern r = Pattern.compile(this.textPartType.getTextPartNameRegularExpression());
+        m = r.matcher(text);
+
+        m.find();
+        this.name = new StringBuilder(m.group(0));
+
+        text.replace(m.start(), m.end(), "");
+    }
+
+    private void parseTitle(StringBuilder text) throws IllegalStateException {
+        Matcher m;
+        Pattern r = Pattern.compile(this.textPartType.getTextPartTitleRegularExpression());
+        m = r.matcher(text);
+
+        m.find();
+        this.title = new StringBuilder(m.group(0));
+
+        text.replace(m.start(), m.end(), "");
+    }
 }

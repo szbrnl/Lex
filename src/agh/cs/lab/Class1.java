@@ -6,7 +6,7 @@ public class Class1 {
    public static void main(String args[]) throws IOException{
 
        StringBuilder text = new StringBuilder();
-       try (BufferedReader br = new BufferedReader(new FileReader("uokik.txt"))) {
+       try (BufferedReader br = new BufferedReader(new FileReader("konstytucja.txt"))) {
            String line;
            while ((line = br.readLine()) != null) {
               text.append(line);
@@ -14,19 +14,17 @@ public class Class1 {
            }
        }
 
-       //TODO pominięte wyciąć
+       //TODO zamienić set na mape, żeby szybciej wyszukiwać
+
+       //TODO może interfejs albo klasa abstrakcyjna, żeby uwzględnić puste?
+
+       //TODO pominięte wyciąć (pamiętać o przedziale w uokik)
 
        //TODO Content nie moze być stringiem -> jakaś lista wierszy, uprzednio pozbawiona znaków nowej linii i myślników na końcach?
 
        //TODO Usuwanie śmieci z tekstu
 
-       //TODO Osobna klasa parser?
-
        //TODO Pozostałe regexy
-
-       //TODO regularexpression nie ma być statyczne
-
-       //TODO regularexpressions do ENUMA
 
 //       // Create a Pattern object
 //       Pattern r = Pattern.compile("((Rozdział|DZIAŁ)( [XIVL]{1,})([\\S\\s]*?)(?=\\2|$))");
@@ -41,6 +39,6 @@ public class Class1 {
 //       }
 
        TextPart textPart = new TextPart(TextPartType.Root, text);
-       textPart.testowa();
+       textPart.testowa1();
    }
 }
