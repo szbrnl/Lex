@@ -20,7 +20,18 @@ public class TextPart {
     public TextPart(TextPartType textPartType, StringBuilder content) {
         this.textPartType = textPartType;
         parseContent(content);
+    }
 
+    public TextPart(TextPartType type, StringBuilder name, StringBuilder title, StringBuilder content) {
+        this.textPartType =type;
+        this.name = name.toString();
+        this.title = title.toString();
+        //this.content = parseContent(content);
+        //Jako rozdzielenie contentu na kolejne linijki
+    }
+
+    public void SetChildren(Map<String,TextPart> children) {
+        this.children = children;
     }
 
     public String getContent() {
@@ -37,7 +48,10 @@ public class TextPart {
 
     public void testowa() {
         for (TextPart part : children.values()) {
-            System.out.println(part.getTitle());
+            System.out.println(part.name + "  " + part.title);
+            for(TextPart part1 : part.children.values()) {
+                System.out.println("\t\t"+part1.getName()+" "+part1.getTitle());
+            }
         }
     }
 
@@ -45,8 +59,23 @@ public class TextPart {
     private void parseContent(StringBuilder content) {
 
         if (this.textPartType != TextPartType.Root) {
-            parseName(content);
-            parseTitle(content);
+
+            try {
+                parseName(content);
+            }
+            catch(IllegalStateException ex) {
+                //Could not find name, so it does not exist
+                this.name = "";
+            }
+
+            try {
+                parseTitle(content);
+            }
+            catch (IllegalStateException ex) {
+                //Could not find title, so it does not exist
+                this.title = "";
+            }
+
         }
 
 
@@ -59,7 +88,7 @@ public class TextPart {
         if (type.next() != TextPartType.END) {
             do {
                 type = type.next();
-                r = Pattern.compile(RegularExpressions.getTextPartRegularExpression(type));
+                r = Pattern.compile(type.getTextPartRegularExpression());
                 m = r.matcher(content);
             } while (!m.find() && type.next() != TextPartType.END);
 
@@ -86,7 +115,7 @@ public class TextPart {
 
     private void parseName(StringBuilder content) {
         Matcher m;
-        Pattern r = Pattern.compile(RegularExpressions.getTextPartNameRegularExpression(this.textPartType));
+        Pattern r = Pattern.compile(textPartType.getTextPartNameRegularExpression());
         m = r.matcher(content);
 
         m.find();
@@ -95,9 +124,9 @@ public class TextPart {
         content.replace(m.start(), m.end(), "");
     }
 
-    private void parseTitle(StringBuilder content) {
+    private void parseTitle(StringBuilder content) throws IllegalStateException {
         Matcher m;
-        Pattern r = Pattern.compile(RegularExpressions.getTextPartTitleRegularExpression(this.textPartType));
+        Pattern r = Pattern.compile(textPartType.getTextPartTitleRegularExpression());
         m = r.matcher(content);
 
         m.find();
