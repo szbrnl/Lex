@@ -24,8 +24,8 @@ public class TextParserTests {
             }
         }
 
-        AbstractTextPart textPart = new TextPart(TextPartType.Root, text);
-        List<AbstractTextPart> children = textPart.getAllChildren();
+        TextPart textPart = new TextPart(TextPartType.Root, text);
+        List<TextPart> children = textPart.getAllChildren();
 
         int a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Section, textPart);
         assertEquals(10, a);
@@ -51,8 +51,8 @@ public class TextParserTests {
             }
         }
 
-        AbstractTextPart textPart = new TextPart(TextPartType.Root, text);
-        List<AbstractTextPart> children = textPart.getAllChildren();
+        TextPart textPart = new TextPart(TextPartType.Root, text);
+        List<TextPart> children = textPart.getAllChildren();
 
         int a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Section, textPart);
         assertEquals(0, a);
@@ -68,14 +68,14 @@ public class TextParserTests {
     }
 
 
-    private int countAllTextPartsWithSpecifiedTextPartType(TextPartType textPartType, AbstractTextPart root) {
+    private int countAllTextPartsWithSpecifiedTextPartType(TextPartType textPartType, TextPart root) {
         if (textPartType == TextPartType.END) return 0;
 
         int a = 0;
-        for (AbstractTextPart textPart : root.getAllChildren()) {
+        for (TextPart textPart : root.getAllChildren()) {
             a += countAllTextPartsWithSpecifiedTextPartType(textPartType, textPart);
         }
-        if (root.getTextPartType() == textPartType && root instanceof TextPart) a += 1;
+        if (root.getTextPartType() == textPartType) a += 1;
 
         return a;
     }

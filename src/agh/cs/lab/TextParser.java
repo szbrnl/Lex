@@ -1,11 +1,9 @@
 package agh.cs.lab;
 
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class TextParser {
 
@@ -14,7 +12,7 @@ public class TextParser {
     private StringBuilder content = new StringBuilder();
     private StringBuilder name = new StringBuilder();
     private StringBuilder title = new StringBuilder();
-    private Set<AbstractTextPart> children = new LinkedHashSet<>();
+    private LinkedHashMap<String, TextPart> children = new LinkedHashMap<>();
 
     public TextParser(TextPartType textPartType, StringBuilder text) {
         this.textPartType = textPartType;
@@ -33,7 +31,7 @@ public class TextParser {
         return content.toString();
     }
 
-    public Set<AbstractTextPart> getChildren() {
+    public LinkedHashMap<String, TextPart> getAllChildren() {
         return children;
     }
 
@@ -88,13 +86,13 @@ public class TextParser {
                 m = r.matcher(text);
                 if (m.find()) {
                     m.reset();
-                    children.add(new TextPartContainer(type, text));
+                    children.putAll(new TextPart(type, text).children);
                 }
                 text = new StringBuilder(m.replaceAll(""));
             }
 
-            //Wrzucanie listy do hashset -> bo skoro już sparsowane to mamy klucz
-            children.addAll(nextParts);
+            //Wrzucanie listy do hashmapy -> bo skoro już sparsowane to mamy klucz
+            nextParts.stream().forEachOrdered(p-> children.put(p.getName(), p));
 
             //Content to pozostałości po wycinkach
             this.content = text;
@@ -107,17 +105,26 @@ public class TextParser {
         m = r.matcher(text);
 
         m.find();
+
+        //if(m.) throw new IllegalStateException("Could not find Name");
+
         this.name = new StringBuilder(m.group(0));
 
         text.replace(m.start(), m.end(), "");
     }
 
     private void parseTitle(StringBuilder text) throws IllegalStateException{
+
+        String regexp = this.textPartType.getTextPartTitleRegularExpression();
+        //if(regexp == "") throw new
+
         Matcher m;
         Pattern r = Pattern.compile(this.textPartType.getTextPartTitleRegularExpression());
         m = r.matcher(text);
 
         m.find();
+
+
         this.title = new StringBuilder(m.group(0));
 
         text.replace(m.start(), m.end(), "");
