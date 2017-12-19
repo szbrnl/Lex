@@ -1,11 +1,12 @@
 package agh.cs.lab;
 
-import javax.xml.soap.Text;
-
 public class TextPartContainer extends AbstractTextPart {
 
     public TextPartContainer(TextPartType pretendedTextPartType, StringBuilder content) {
-        this.textPartType = TextPartType.Container;
+        textPartType = pretendedTextPartType;
+
+        TextParser textParser = new TextParser(this.textPartType, content);
+        this.children = textParser.getChildren();
     }
 
 }

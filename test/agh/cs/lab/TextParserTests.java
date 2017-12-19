@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.List;
 
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TextParserTests {
@@ -25,8 +24,8 @@ public class TextParserTests {
             }
         }
 
-        TextPart textPart = new TextPart(TextPartType.Root, text);
-        List<TextPart> children = textPart.getAllChildren();
+        AbstractTextPart textPart = new TextPart(TextPartType.Root, text);
+        List<AbstractTextPart> children = textPart.getAllChildren();
 
         int a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Section, textPart);
         assertEquals(10, a);
@@ -38,7 +37,7 @@ public class TextParserTests {
         assertEquals(0, a);
 
         a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Article, textPart);
-        assertEquals(175,a);
+        assertEquals(175, a);
     }
 
     @Test
@@ -52,8 +51,8 @@ public class TextParserTests {
             }
         }
 
-        TextPart textPart = new TextPart(TextPartType.Root, text);
-        List<TextPart> children = textPart.getAllChildren();
+        AbstractTextPart textPart = new TextPart(TextPartType.Root, text);
+        List<AbstractTextPart> children = textPart.getAllChildren();
 
         int a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Section, textPart);
         assertEquals(0, a);
@@ -69,14 +68,14 @@ public class TextParserTests {
     }
 
 
-    private int countAllTextPartsWithSpecifiedTextPartType(TextPartType textPartType, TextPart root) {
-        if(textPartType == TextPartType.END) return 0;
+    private int countAllTextPartsWithSpecifiedTextPartType(TextPartType textPartType, AbstractTextPart root) {
+        if (textPartType == TextPartType.END) return 0;
 
         int a = 0;
-        for(TextPart textPart : root.getAllChildren()) {
-            a+=countAllTextPartsWithSpecifiedTextPartType(textPartType, textPart);
+        for (AbstractTextPart textPart : root.getAllChildren()) {
+            a += countAllTextPartsWithSpecifiedTextPartType(textPartType, textPart);
         }
-        if(root.getTextPartType() == textPartType) a+=1;
+        if (root.getTextPartType() == textPartType && root instanceof TextPart) a += 1;
 
         return a;
     }

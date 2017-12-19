@@ -8,11 +8,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextParser {
+
     private final TextPartType textPartType;
+
     private StringBuilder content = new StringBuilder();
     private StringBuilder name = new StringBuilder();
     private StringBuilder title = new StringBuilder();
-    private Set<TextPart> children = new LinkedHashSet<>();
+    private Set<AbstractTextPart> children = new LinkedHashSet<>();
 
     public TextParser(TextPartType textPartType, StringBuilder text) {
         this.textPartType = textPartType;
@@ -31,7 +33,7 @@ public class TextParser {
         return content.toString();
     }
 
-    public Set<TextPart> getChildren() {
+    public Set<AbstractTextPart> getChildren() {
         return children;
     }
 
@@ -42,17 +44,15 @@ public class TextParser {
             try {
                 parseName(text);
             } catch (IllegalStateException ex) {
-                //Could not find name, so it does not exist
+                //Nie znaleziono wiec nie istnieje
                 this.name = new StringBuilder("");
             }
 
             try {
                 parseTitle(text);
             } catch (IllegalStateException ex) {
-                //Could not find title, so it does not exist
                 this.title = new StringBuilder("");
             }
-
         }
 
 
@@ -72,7 +72,6 @@ public class TextParser {
             m.reset();
 
 
-
             List<TextPart> nextParts = new LinkedList<TextPart>();
 
             while (m.find()) {
@@ -83,15 +82,15 @@ public class TextParser {
             text = new StringBuilder(m.replaceAll(""));
 
             //Sprawdzamy, czy w tym co zostało nie ma czegoś do sparsowania
-            if(type.next() != TextPartType.END) {
+            if (type.next() != TextPartType.END && this.textPartType != TextPartType.Root) {
                 TextPartType nextType = type.next();
                 r = Pattern.compile(nextType.getTextPartRegularExpression());
                 m = r.matcher(text);
                 if (m.find()) {
                     m.reset();
-                    children.add(new TextPart(type, text));
-                    children.forEach(p -> System.out.println(p.getName()));
+                    children.add(new TextPartContainer(type, text));
                 }
+                text = new StringBuilder(m.replaceAll(""));
             }
 
             //Wrzucanie listy do hashset -> bo skoro już sparsowane to mamy klucz
@@ -102,7 +101,7 @@ public class TextParser {
         }
     }
 
-    private void parseName(StringBuilder text) {
+    private void parseName(StringBuilder text) throws IllegalStateException{
         Matcher m;
         Pattern r = Pattern.compile(this.textPartType.getTextPartNameRegularExpression());
         m = r.matcher(text);
@@ -113,7 +112,7 @@ public class TextParser {
         text.replace(m.start(), m.end(), "");
     }
 
-    private void parseTitle(StringBuilder text) throws IllegalStateException {
+    private void parseTitle(StringBuilder text) throws IllegalStateException{
         Matcher m;
         Pattern r = Pattern.compile(this.textPartType.getTextPartTitleRegularExpression());
         m = r.matcher(text);

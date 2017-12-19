@@ -31,29 +31,23 @@ public class TextPart extends AbstractTextPart {
         return title;
     }
 
-    public void testowa() {
-
-        for (TextPart part : children) {
-            System.out.println(part.textPartType.toString() + part.name + "  " + part.title);
-            for(TextPart part1 : part.children) {
-                System.out.println(part1.textPartType.toString()+"\t\t"+part1.getName()+" "+part1.getTitle());
-               for(TextPart part2 : part1.children) {
-                    System.out.println(part2.textPartType.toString()+"\t\t\t"+part2.getName()+" "+part2.getTitle());
-                }
-            }
-        }
-    }
     public void testowa1() {
 
-        for (TextPart part : children) {
-            if(part.textPartType == TextPartType.Article)
-            System.out.println(part.textPartType.toString() + part.name + "  " + part.title);
-            for(TextPart part1 : part.children) {
-                if(part1.textPartType == TextPartType.Article)
-                System.out.println(part1.textPartType.toString()+"\t\t"+part1.getName()+" "+part1.getTitle());
-                for(TextPart part2 : part1.children) {
-                    if(part2.textPartType == TextPartType.Article)
-                    System.out.println(part2.textPartType.toString()+"\t\t\t"+part2.getName()+" "+part2.getTitle());
+        for (AbstractTextPart part : children) {
+            if(part instanceof TextPart) {
+                TextPart textPart = (TextPart) part;
+                System.out.println(textPart.textPartType.toString() + textPart.name + "  " + textPart.title);
+            }
+            for(AbstractTextPart part1 : part.children) {
+                if(part1 instanceof TextPart) {
+                    TextPart textPart1 = (TextPart) part1;
+                    System.out.println(textPart1.textPartType.toString() + textPart1.name + "  " + textPart1.title);
+                }
+                for(AbstractTextPart part2 : part1.children) {
+                    if(part2 instanceof TextPart) {
+                        TextPart textPart2 = (TextPart) part2;
+                        System.out.println(textPart2.textPartType.toString() + textPart2.name + "  " + textPart2.title);
+                    }
                 }
             }
         }

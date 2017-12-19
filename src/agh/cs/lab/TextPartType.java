@@ -3,7 +3,7 @@ package agh.cs.lab;
 import java.util.*;
 
 public enum TextPartType {
-    Container, Root, Section, Chapter, CapitalLetters, Article, END, NumPoint, NumParenthesisPoint, LetterParenthesisPoint;
+    Root, Section, Chapter, CapitalLetters, Article, END, NumPoint, NumParenthesisPoint, LetterParenthesisPoint;
 
     TextPartType next() {
         return (TextPartType.values())[this.ordinal() + 1];
@@ -14,15 +14,15 @@ public enum TextPartType {
     }
 
     public String getTextPartRegularExpression() {
-        return regularExpressions.get(this.ordinal()-1);
+        return regularExpressions.get(this.ordinal());
     }
 
     public String getTextPartNameRegularExpression() {
-        return nameRegularExpressions.get(this.ordinal()-1);
+        return nameRegularExpressions.get(this.ordinal());
     }
 
     public String getTextPartTitleRegularExpression() {
-        return titleRegularExpressions.get(this.ordinal()-1);
+        return titleRegularExpressions.get(this.ordinal());
     }
 
     private List<String> regularExpressions = Arrays.asList(
@@ -30,7 +30,6 @@ public enum TextPartType {
             "((DZIAŁ)( [XIVLA]{1,})([\\S\\s]*?)(?=DZIAŁ|$))",
             "((Rozdział)(( [XIVL]{1,})|( \\d{1,}))([\\S\\s]*?)(?=Rozdział|$))",
             "(?m)^([\\p{Lu} ,]+){2,}(\\n)([\\S\\s]*?)(?=\\p{Lu}{3,}|\\Z)",
-            //"(((\\p{Lu}){1,}[ ,]?){1,})(\\n)([\\S\\s]*?)(?=\\b\\p{Lu}{2,}\\b|$)",
             "(Art\\. \\d*[a-z]*\\.)([\\s\\S]*?)(?=Art\\. \\d+[a-z]*\\.|$)"
 
     );

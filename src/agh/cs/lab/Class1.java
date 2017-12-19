@@ -14,6 +14,8 @@ public class Class1 {
            }
        }
 
+       //TODO uokik art 4
+
        //TODO zamienić set na mape, żeby szybciej wyszukiwać
 
        //TODO może interfejs albo klasa abstrakcyjna, żeby uwzględnić puste?
@@ -26,19 +28,8 @@ public class Class1 {
 
        //TODO Pozostałe regexy
 
-//       // Create a Pattern object
-//       Pattern r = Pattern.compile("((Rozdział|DZIAŁ)( [XIVL]{1,})([\\S\\s]*?)(?=\\2|$))");
-//
-//       // Now create matcher object.
-//       Matcher m = r.matcher(text);
-//
-//
-//       while(m.find()) {
-//           System.out.println(m.group(0));
-//           System.out.println("------");
-//       }
-
        TextPart textPart = new TextPart(TextPartType.Root, text);
+
        textPart.testowa1();
    }
 }
