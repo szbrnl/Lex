@@ -6,7 +6,7 @@ public class Class1 {
     public static void main(String args[]) throws IOException {
 
         StringBuilder text = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader("konstytucja.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("uokik.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 text.append(line);
@@ -40,7 +40,7 @@ public class Class1 {
 
         try {
             System.out.print(root.GetElementAsString(new TextPartType[]{TextPartType.Chapter},
-                    new String[]{"II"}));
+                    new String[]{"4"}));
         } catch (IllegalArgumentException e) {
             System.out.println("Nie znaleziono takiego elemenu w podanym pliku");
         }

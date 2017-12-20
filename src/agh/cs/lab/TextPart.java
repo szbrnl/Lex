@@ -56,10 +56,11 @@ public class TextPart {
         }
 
         if(textPartType == TextPartType.Chapter || textPartType == TextPartType.Section || textPartType == TextPartType.Title)
-            elem.append("\n\n");
+            elem.append("\n");
 
         if(content.size() > 0) {
             content.stream().forEachOrdered(s-> elem.append(s+"\n"));
+            elem.deleteCharAt(elem.length()-1);
         }
 
 
