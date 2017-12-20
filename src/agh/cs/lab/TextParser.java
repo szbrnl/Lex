@@ -21,6 +21,7 @@ public class TextParser {
     public TextParser(TextPartType textPartType, StringBuilder text) {
         this.textPartType = textPartType;
         parseContent(text);
+        eraseUnnecessaryElements();
         normalizeWhitespaces();
 
         contentList = new ArrayList<>(
@@ -28,10 +29,23 @@ public class TextParser {
                         content.toString().split("\n"))
                         .stream().filter(s -> s.length() > 0)
                         .collect(Collectors.toList()
-                )
+                        )
         );
 
         normalizeLines();
+    }
+
+    private void eraseUnnecessaryElements() {
+        String[] unnecessaryElementsRegexps = new String[]{
+                "©Kancelaria Sejmu\\n2009-11-16\n?"
+        };
+
+        for (String s : unnecessaryElementsRegexps) {
+            Pattern r = Pattern.compile(s);
+            Matcher m = r.matcher(content);
+           content = new StringBuilder(m.replaceAll(""));
+        }
+
     }
 
     public String getName() {

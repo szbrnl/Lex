@@ -60,12 +60,13 @@ public class TextPart {
 
         if(content.size() > 0) {
             content.stream().forEachOrdered(s-> elem.append(s+"\n"));
-            elem.deleteCharAt(elem.length()-1);
         }
 
+        if(textPartType == TextPartType.Title)
+            elem.append("\n");
 
         children.values().stream().forEachOrdered(c -> elem.append(c.GetFullElement()));
-        if(textPartType.ordinal() <= TextPartType.Article.ordinal())
+        if(textPartType.isAbove(TextPartType.Paragraph))
             elem.append("\n");
         return elem;
     }

@@ -19,6 +19,10 @@ public enum TextPartType {
         return this.ordinal() > other.ordinal();
     }
 
+    public boolean isAbove(TextPartType other) {
+        return this.ordinal() < other.ordinal();
+    }
+
     public String generateKey(String number) {
         switch (this) {
             case Section:
