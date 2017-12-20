@@ -2,10 +2,12 @@ package agh.cs.lab;
 
 import org.junit.jupiter.api.Test;
 
+import javax.xml.soap.Text;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -25,7 +27,7 @@ public class TextParserTests {
         }
 
         TextPart textPart = new TextPart(TextPartType.Root, text);
-        List<TextPart> children = textPart.getAllChildren();
+        LinkedHashMap<String, TextPart> children = textPart.getAllChildren();
 
         int a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Section, textPart);
         assertEquals(10, a);
@@ -33,7 +35,7 @@ public class TextParserTests {
         a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Chapter, textPart);
         assertEquals(19, a);
 
-        a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.CapitalLetters, textPart);
+        a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Title, textPart);
         assertEquals(0, a);
 
         a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Article, textPart);
@@ -52,7 +54,7 @@ public class TextParserTests {
         }
 
         TextPart textPart = new TextPart(TextPartType.Root, text);
-        List<TextPart> children = textPart.getAllChildren();
+        LinkedHashMap<String, TextPart> children = textPart.getAllChildren();
 
         int a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Section, textPart);
         assertEquals(0, a);
@@ -60,7 +62,7 @@ public class TextParserTests {
         a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Chapter, textPart);
         assertEquals(13, a);
 
-        a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.CapitalLetters, textPart);
+        a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Title, textPart);
         assertEquals(16, a);
 
         a = countAllTextPartsWithSpecifiedTextPartType(TextPartType.Article, textPart);
@@ -72,7 +74,7 @@ public class TextParserTests {
         if (textPartType == TextPartType.END) return 0;
 
         int a = 0;
-        for (TextPart textPart : root.getAllChildren()) {
+        for (TextPart textPart : root.getAllChildren().values()) {
             a += countAllTextPartsWithSpecifiedTextPartType(textPartType, textPart);
         }
         if (root.getTextPartType() == textPartType) a += 1;
