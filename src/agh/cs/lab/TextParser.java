@@ -7,9 +7,13 @@ import java.util.stream.Collectors;
 
 public class TextParser {
 
+    //©Kancelaria Sejmu s. 50/73
+    //2017-06-28
+
     private final TextPartType textPartType;
 
     private StringBuilder content = new StringBuilder();
+    private ArrayList<String> contentList;
     private StringBuilder name = new StringBuilder();
     private StringBuilder title = new StringBuilder();
     private LinkedHashMap<String, TextPart> children = new LinkedHashMap<>();
@@ -17,6 +21,17 @@ public class TextParser {
     public TextParser(TextPartType textPartType, StringBuilder text) {
         this.textPartType = textPartType;
         parseContent(text);
+        normalizeWhitespaces();
+
+        contentList = new ArrayList<>(
+                Arrays.asList(
+                        content.toString().split("\n"))
+                        .stream().filter(s -> s.length() > 0)
+                        .collect(Collectors.toList()
+                )
+        );
+
+        normalizeLines();
     }
 
     public String getName() {
@@ -27,8 +42,8 @@ public class TextParser {
         return title.toString();
     }
 
-    public String getContent() {
-        return content.toString();
+    public List<String> getContent() {
+        return contentList;
     }
 
     public LinkedHashMap<String, TextPart> getAllChildren() {
@@ -92,41 +107,99 @@ public class TextParser {
             }
 
             //Wrzucanie listy do hashmapy -> bo skoro już sparsowane to mamy klucz
-            nextParts.stream().forEachOrdered(p-> children.put(p.getName(), p));
+            nextParts.stream().forEachOrdered(p -> children.put(p.getName(), p));
 
             //Content to pozostałości po wycinkach
             this.content = text;
         }
     }
 
-    private void parseName(StringBuilder text) throws IllegalStateException{
+    private void parseName(StringBuilder text) throws IllegalStateException {
         Matcher m;
         Pattern r = Pattern.compile(this.textPartType.getTextPartNameRegularExpression());
         m = r.matcher(text);
 
         m.find();
 
-        //if(m.) throw new IllegalStateException("Could not find Name");
-
         this.name = new StringBuilder(m.group(0));
 
         text.replace(m.start(), m.end(), "");
     }
 
-    private void parseTitle(StringBuilder text) throws IllegalStateException{
-
-        String regexp = this.textPartType.getTextPartTitleRegularExpression();
-        //if(regexp == "") throw new
-
+    private void parseTitle(StringBuilder text) throws IllegalStateException {
         Matcher m;
         Pattern r = Pattern.compile(this.textPartType.getTextPartTitleRegularExpression());
         m = r.matcher(text);
 
         m.find();
 
-
         this.title = new StringBuilder(m.group(0));
 
         text.replace(m.start(), m.end(), "");
     }
+
+    private void normalizeWhitespaces() {
+
+        while (title.length() > 0 && title.indexOf("\n") == 0)
+            title.deleteCharAt(0);
+
+        while (title.length() > 0 && title.indexOf("\n") == title.length() - 1)
+            title.deleteCharAt(title.length() - 1);
+
+        while (name.length() > 0 && name.indexOf("\n") == 0)
+            name.deleteCharAt(0);
+
+        while (name.length() > 0 && name.indexOf("\n") == name.length() - 1)
+            name.deleteCharAt(name.length() - 1);
+
+        while (content.indexOf("\n") == 0)
+            content.deleteCharAt(0);
+
+        while (content.length() > 0 && content.lastIndexOf("\n") == content.length() - 1)
+            content.deleteCharAt(content.length() - 1);
+
+        while (content.length() > 0 && content.indexOf(" ") == 0)
+            content.deleteCharAt(0);
+
+        while (content.length() > 0 && content.charAt(content.length() - 1) == ' ')
+            content.deleteCharAt(content.length() - 1);
+
+    }
+
+    private void normalizeLines() {
+        StringBuilder tmp = new StringBuilder();
+        boolean somethingChanged = false;
+        for (int i = 0; i < contentList.size(); i++) {
+            StringBuilder contentListElement = new StringBuilder(contentList.get(i));
+            somethingChanged = false;
+
+            if (tmp.length() > 0) {
+                tmp.append(contentListElement);
+                contentListElement = tmp;
+                tmp = new StringBuilder();
+                somethingChanged = true;
+            }
+
+            //If the last character is a dash
+            if (contentListElement.length() > 0 && contentListElement.charAt(contentListElement.length() - 1) == '-') {
+                //Delete it
+                contentListElement.deleteCharAt(contentListElement.length() - 1);
+                //And find beginning of the last word
+                int lastSpacePosition = contentListElement.lastIndexOf(" ");
+                //Save last word to tmp
+                tmp = new StringBuilder(contentListElement.substring(lastSpacePosition + 1));
+                //Delete it from original line (with space)
+                contentListElement.delete(lastSpacePosition, contentListElement.length());
+
+                somethingChanged = true;
+            }
+
+            if (somethingChanged) {
+                //Replace changed line with a new one
+                contentList.set(i, contentListElement.toString());
+            }
+        }
+    }
+
+
 }
