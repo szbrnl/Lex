@@ -14,19 +14,13 @@ public class Class1 {
             }
         }
 
+        //TODO przerobić zwracanie tekstu pry pomocy metody na toString?
 
         //TODO uokik art 4
 
         //TODO pominięte wyciąć (pamiętać o przedziale w uokik)
 
-        //TODO Content nie moze być stringiem -> jakaś lista wierszy, uprzednio pozbawiona znaków nowej linii i myślników na końcach?
-
         //TODO Usuwanie śmieci z tekstu
-
-        //TODO Pozostałe regexy
-
-        //TODO normalizacja - spacje na początku
-
 
         DocumentRoot root = new DocumentRoot(text);
         //root.testowa1();
