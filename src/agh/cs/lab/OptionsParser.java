@@ -89,7 +89,7 @@ public class OptionsParser {
 
     public void showHelp() {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("lex", options, true);
+        formatter.printHelp("lex", options);
     }
 
     private void checkOptions() throws IllegalArgumentException {

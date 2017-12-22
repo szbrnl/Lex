@@ -74,8 +74,8 @@ public class TextPart {
             elem.append("\n");
 
         children.values().stream().forEachOrdered(c -> elem.append(c.GetFullElement()));
-        if (textPartType.isAbove(TextPartType.Paragraph))
-            elem.append("\n");
+        // if (textPartType.isAbove(TextPartType.Paragraph))
+        //     elem.append("\n");
 
         elem.append("\n");
 
