@@ -1,5 +1,7 @@
 Instrukcja obsługi:
 
+```javac -encoding UTF8 ...```
+
 1. Pomoc
 <br> ```lex -h```
 2. Wczytywanie plików
