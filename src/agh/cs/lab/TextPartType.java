@@ -26,6 +26,7 @@ public enum TextPartType {
     public String generateKey(String number) {
         switch (this) {
             case Section:
+                return "DZIAŁ "+number;
 
             case Chapter:
                 return "Rozdział "+number;

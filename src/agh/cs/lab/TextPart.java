@@ -8,7 +8,7 @@ public class TextPart {
 
     protected final String name;    //np ROZDZIAL III
     protected final String title;   //np. ŹRÓDŁA PRAWA
-    protected final List<String> content; //to co zostało - np preambuła
+    protected final List<String> content; 
     protected final int number;
 
     protected TextPartType textPartType;
@@ -74,7 +74,11 @@ public class TextPart {
         children.values().stream().forEachOrdered(c -> elem.append(c.GetFullElement()));
         if(textPartType.isAbove(TextPartType.Paragraph))
             elem.append("\n");
+        
+        elem.append("\n");
+
         return elem;
+
     }
 
     //Source: https://stackoverflow.com/questions/32656888/recursive-use-of-stream-flatmap

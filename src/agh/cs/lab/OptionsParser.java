@@ -100,19 +100,19 @@ public class OptionsParser {
         }
 
         if (cmd.hasOption("tc") && cmd.hasOption("Lpo")) {
-            throw new IllegalArgumentException("Cannot combine -c -LPo");
+            throw new IllegalArgumentException("Cannot combine -tc -LPo");
         }
 
-        if (cmd.hasOption("c") && cmd.hasOption("P")) {
-            throw new IllegalArgumentException("Cannot combine -c -P");
+        if (cmd.hasOption("tc") && cmd.hasOption("P")) {
+            throw new IllegalArgumentException("Cannot combine -tc -P");
         }
 
-        if (cmd.hasOption("c") && cmd.hasOption("Po")) {
-            throw new IllegalArgumentException("Cannot combine -c -Po");
+        if (cmd.hasOption("tc") && cmd.hasOption("Po")) {
+            throw new IllegalArgumentException("Cannot combine -tc -Po");
         }
 
-        if (cmd.hasOption("c") && cmd.hasOption("As")) {
-            throw new IllegalArgumentException("Cannot combine -c -tc");
+        if (cmd.hasOption("tc") && cmd.hasOption("As")) {
+            throw new IllegalArgumentException("Cannot combine -As -tc");
         }
 
         if (cmd.hasOption("As")) {
@@ -120,30 +120,28 @@ public class OptionsParser {
             if (vals[0].equals(vals[1]))
                 throw new IllegalArgumentException("Wrong range argument");
         }
+
+        if (!cmd.hasOption("c") && !cmd.hasOption("tc")) {
+            throw new IllegalArgumentException("Mode must be specified");
+        }
     }
 
     private void addOptions() {
-        OptionGroup modes = new OptionGroup();
-        OptionGroup printModes = new OptionGroup();
-        OptionGroup elements = new OptionGroup();
-
-        modes.addOption(Option.builder("h").desc("Show help").build());
-        modes.addOption(Option.builder("f").argName("Filepath").hasArg().desc("File to open").build());
-        printModes.addOption(Option.builder("c").argName("Show content mode").desc("Show content of specified element(s)").build());
-        printModes.addOption(Option.builder("tc").desc("Show table of contents of specified element\n" +
+        options.addOption(Option.builder("h").desc("Show help").build());
+        options.addOption(Option.builder("f").argName("Filepath").hasArg().desc("File to open").build());
+        options.addOption(Option.builder("c").argName("Show content mode").desc("Show content of specified element(s)").build());
+        options.addOption(Option.builder("tc").desc("Show table of contents of specified element\n" +
                 "or use without additional parameters to show\n" +
                 "table of contents for entire file").build());
-        elements.addOption(Option.builder("S").argName("Section").hasArg().desc("Select one section (\"dział\")").build());
-        elements.addOption(Option.builder("C").argName("Chapter").hasArg().desc("Select one chapter").build());
-        elements.addOption(Option.builder("As").argName("Range of Articles").numberOfArgs(2).valueSeparator(' ').desc("Select Articles in given range separated by space, e.g. \"3 6\"").build());
-        elements.addOption(Option.builder("A").argName("Article").hasArg().desc("Select one Article").build());
-        elements.addOption(Option.builder("P").argName("Paragraph").hasArg().desc("Select one paragraph").build());
-        elements.addOption(Option.builder("Po").argName("Point").hasArg().desc("Select one point").build());
-        elements.addOption(Option.builder("LPo").argName("Letter Point").hasArg().desc("Select one letter point (e.g. \"a)\"").build());
+        options.addOption(Option.builder("S").argName("Section").hasArg().desc("Select one section (\"dział\")").build());
+        options.addOption(Option.builder("C").argName("Chapter").hasArg().desc("Select one chapter").build());
+        options.addOption(Option.builder("As").argName("Range of Articles").numberOfArgs(2).valueSeparator(' ').desc("Select Articles in given range separated by space, e.g. \"3 6\"").build());
+        options.addOption(Option.builder("A").argName("Article").hasArg().desc("Select one Article").build());
+        options.addOption(Option.builder("P").argName("Paragraph").hasArg().desc("Select one paragraph").build());
+        options.addOption(Option.builder("Po").argName("Point").hasArg().desc("Select one point").build());
+        options.addOption(Option.builder("LPo").argName("Letter Point").hasArg().desc("Select one letter point (e.g. \"a)\"").build());
 
-        options.addOptionGroup(printModes);
-        options.addOptionGroup(elements);
-        options.addOptionGroup(modes);
+        
     }
 
 }
