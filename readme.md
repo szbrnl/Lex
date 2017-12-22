@@ -1,4 +1,5 @@
 Instrukcja obsługi:
+
 0. Pomoc
 <br> ```lex -h```
 1. Wczytywanie plików
