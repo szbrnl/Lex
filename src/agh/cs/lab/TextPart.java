@@ -1,6 +1,5 @@
 package agh.cs.lab;
 
-import javax.xml.soap.Text;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -99,4 +98,25 @@ public class TextPart {
         );
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextPart textPart = (TextPart) o;
+
+        if (number != textPart.number) return false;
+        if (name != null ? !name.equals(textPart.name) : textPart.name != null) return false;
+        if (title != null ? !title.equals(textPart.title) : textPart.title != null) return false;
+        return textPartType == textPart.textPartType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + number;
+        result = 31 * result + (textPartType != null ? textPartType.hashCode() : 0);
+        return result;
+    }
 }

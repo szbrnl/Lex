@@ -33,5 +33,6 @@
         <jarDirectory url="file://$MODULE_DIR$/commons-cli-1.4" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-cli" level="project" />
   </component>
 </module>

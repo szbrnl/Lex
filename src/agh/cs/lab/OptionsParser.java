@@ -1,6 +1,7 @@
 package agh.cs.lab;
 
-import org.apache.commons.cli.*;
+
+import agh.cs.lab.cli.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
