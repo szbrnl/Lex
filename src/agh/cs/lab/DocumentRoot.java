@@ -12,7 +12,6 @@ public class DocumentRoot extends TextPart {
     public DocumentRoot(StringBuilder content) {
         super(TextPartType.Root, content);
         this.getAllOfType(TextPartType.Article).forEach(x -> articles.put(x.name, x));
-
     }
 
     public String getElementAsString(TextPartType[] textPartTypes, String[] numbers) throws IllegalArgumentException {

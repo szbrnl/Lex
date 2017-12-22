@@ -134,7 +134,7 @@ public class OptionsParser {
                 "or use without additional parameters to show\n" +
                 "table of contents for entire file").build());
         options.addOption(Option.builder("S").argName("Section").hasArg().desc("Select one section (\"dział\")").build());
-        options.addOption(Option.builder("C").argName("Chapter").hasArg().desc("Select one chapter").build());
+        options.addOption(Option.builder("C").argName("Chapter").hasArg().desc("Select one chapter. Use number as in file").build());
         options.addOption(Option.builder("As").argName("Range of Articles").numberOfArgs(2).valueSeparator(' ').desc("Select Articles in given range separated by space, e.g. \"3 6\"").build());
         options.addOption(Option.builder("A").argName("Article").hasArg().desc("Select one Article").build());
         options.addOption(Option.builder("P").argName("Paragraph").hasArg().desc("Select one paragraph").build());
