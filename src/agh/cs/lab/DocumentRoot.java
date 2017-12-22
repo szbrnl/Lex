@@ -63,7 +63,7 @@ public class DocumentRoot extends TextPart {
         element.getAllAboveEqualsType(TextPartType.Title).stream().forEachOrdered(
                 x -> {
                     tableOfContents.append(x.name);
-                    tableOfContents.append("\n");
+                    tableOfContents.append("\n\n");
 
                     if (x.title.length() > 0) {
                         tableOfContents.append(x.title);

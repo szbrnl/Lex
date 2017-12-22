@@ -78,6 +78,8 @@ public class TextPart {
         //     elem.append("\n");
 
         elem.append("\n");
+        if (textPartType.isBelow(TextPartType.Paragraph))
+            elem.deleteCharAt(elem.length()-1);
 
         return elem;
     }
