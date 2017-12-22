@@ -5,7 +5,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.*;
 
 public enum TextPartType {
-    Root, Section, Chapter, Title, Article, Paragraph, NumParenthesisPoint, LetterParenthesisPoint, Anything,  END;
+    Root, Section, Chapter, Title, Article, Paragraph, NumParenthesisPoint, LetterParenthesisPoint, Anything, END;
 
     TextPartType next() {
         return (TextPartType.values())[this.ordinal() + 1];
@@ -26,22 +26,22 @@ public enum TextPartType {
     public String generateKey(String number) {
         switch (this) {
             case Section:
-                return "DZIAŁ "+number;
+                return "DZIAŁ " + number;
 
             case Chapter:
-                return "Rozdział "+number;
+                return "Rozdział " + number;
 
             case Article:
                 return "Art. " + number + ".";
 
             case Paragraph:
-                return number+". ";
+                return number + ". ";
 
             case NumParenthesisPoint:
-                return number+") ";
+                return number + ") ";
 
             case LetterParenthesisPoint:
-                return number+") ";
+                return number + ") ";
 
             default:
                 throw new NotImplementedException();

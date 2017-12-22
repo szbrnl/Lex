@@ -240,12 +240,18 @@ public class TextParser {
     public int fromRoman(StringBuilder romanNumber) {
         romanNumber = new StringBuilder(romanNumber.toString().toUpperCase());
 
-        if (romanNumber.length() == 0) return 0;
-        if (romanNumber.substring(0, 1).equals("X")) return 10 + fromRoman(romanNumber.deleteCharAt(0));
-        if (romanNumber.length() >1 && romanNumber.substring(0, 2).equals("IX")) return 9 + fromRoman(romanNumber.delete(0, 2));
-        if (romanNumber.substring(0, 1).equals("V")) return 5 + fromRoman(romanNumber.delete(0, 1));
-        if (romanNumber.length() >1 && romanNumber.substring(0, 2).equals("IV")) return 4 + fromRoman(romanNumber.delete(0, 2));
-        if (romanNumber.substring(0, 1).equals("I")) return 1 + fromRoman(romanNumber.delete(0, 1));
+        if (romanNumber.length() == 0)
+            return 0;
+        if (romanNumber.substring(0, 1).equals("X"))
+            return 10 + fromRoman(romanNumber.deleteCharAt(0));
+        if (romanNumber.length() > 1 && romanNumber.substring(0, 2).equals("IX"))
+            return 9 + fromRoman(romanNumber.delete(0, 2));
+        if (romanNumber.substring(0, 1).equals("V"))
+            return 5 + fromRoman(romanNumber.delete(0, 1));
+        if (romanNumber.length() > 1 && romanNumber.substring(0, 2).equals("IV"))
+            return 4 + fromRoman(romanNumber.delete(0, 2));
+        if (romanNumber.substring(0, 1).equals("I"))
+            return 1 + fromRoman(romanNumber.delete(0, 1));
         throw new IllegalArgumentException("Not valid roman number");
     }
 

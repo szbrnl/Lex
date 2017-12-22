@@ -91,7 +91,7 @@ public class OptionsParser {
     }
 
     private void checkOptions() throws IllegalArgumentException {
-        if(!cmd.hasOption("h") && !cmd.hasOption("f")) {
+        if (!cmd.hasOption("h") && !cmd.hasOption("f")) {
             throw new IllegalArgumentException("File not specified");
         }
 
@@ -141,7 +141,7 @@ public class OptionsParser {
         options.addOption(Option.builder("Po").argName("Point").hasArg().desc("Select one point").build());
         options.addOption(Option.builder("LPo").argName("Letter Point").hasArg().desc("Select one letter point (e.g. \"a)\"").build());
 
-        
+
     }
 
 }

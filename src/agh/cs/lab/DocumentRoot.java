@@ -35,12 +35,12 @@ public class DocumentRoot extends TextPart {
         StringBuilder tableOfContents = new StringBuilder();
 
         this.getAllAboveEqualsType(TextPartType.Title).stream().forEachOrdered(
-                x-> {
+                x -> {
 
                     tableOfContents.append(x.name);
                     tableOfContents.append("\n");
 
-                    if(x.title.length()>0) {
+                    if (x.title.length() > 0) {
                         tableOfContents.append(x.title);
                         tableOfContents.append("\n");
 
@@ -52,21 +52,21 @@ public class DocumentRoot extends TextPart {
         return tableOfContents.toString();
     }
 
-    public String getTableOfContents(TextPartType type, String number) throws IllegalArgumentException{
+    public String getTableOfContents(TextPartType type, String number) throws IllegalArgumentException {
 
         StringBuilder tableOfContents = new StringBuilder();
 
-        TextPart element =  this.searchByKey(type, type.generateKey(number), this);
+        TextPart element = this.searchByKey(type, type.generateKey(number), this);
 
-        if(element == null)
+        if (element == null)
             throw new IllegalArgumentException("Element not found");
 
         element.getAllAboveEqualsType(TextPartType.Title).stream().forEachOrdered(
-                x-> {
+                x -> {
                     tableOfContents.append(x.name);
                     tableOfContents.append("\n");
 
-                    if(x.title.length()>0) {
+                    if (x.title.length() > 0) {
                         tableOfContents.append(x.title);
                         tableOfContents.append("\n");
                     }
@@ -76,8 +76,7 @@ public class DocumentRoot extends TextPart {
         return tableOfContents.toString();
     }
 
-
-    public String getArticlesInRange(String start, String end) {
+    public String getArticlesInRange(String start, String end) throws IllegalArgumentException {
         String startKey = TextPartType.Article.generateKey(start);
         String endKey = TextPartType.Article.generateKey(end);
 
@@ -96,26 +95,23 @@ public class DocumentRoot extends TextPart {
                 break;
         }
 
-        if(entry == null) {
+        if (entry == null) {
             throw new IllegalArgumentException("Starting element not found");
         }
 
         content.append(entry.getValue().GetFullElement());
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             entry = it.next();
-            if(!entry.getKey().equals(endKey)) {
+            if (!entry.getKey().equals(endKey)) {
                 content.append(entry.getValue().GetFullElement());
-            }
-            else {
+            } else {
                 content.append(entry.getValue().GetFullElement());
                 break;
             }
         }
         return content.toString();
-
     }
-
 
 //    public String getElementsInRange(TextPartType textPartType, String start, String end) throws IllegalArgumentException {
 //        TextPart part = this;
@@ -174,7 +170,6 @@ public class DocumentRoot extends TextPart {
 //
 //        return content;
 //    }
-
 
     private TextPart searchByKey(TextPartType textPartType, String key, TextPart node) {
         if (node.textPartType == TextPartType.END.previous()) return null;
