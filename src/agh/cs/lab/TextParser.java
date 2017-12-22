@@ -7,10 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TextParser {
-
-    //©Kancelaria Sejmu s. 50/73
-    //2017-06-28
-
     private final TextPartType textPartType;
 
     private StringBuilder content = new StringBuilder();
@@ -22,14 +18,14 @@ public class TextParser {
 
     public TextParser(TextPartType textPartType, StringBuilder text) {
         this.textPartType = textPartType;
+
         parseContent(text);
         eraseUnnecessaryElements();
         normalizeWhitespaces();
 
         contentList = new ArrayList<>(
-                Arrays.asList(
-                        content.toString().split("\n"))
-                        .stream().filter(s -> s.length() > 0)
+                Arrays.stream(
+                        content.toString().split("\n")).filter(s -> s.length() > 0)
                         .collect(Collectors.toList()
                         )
         );
@@ -75,8 +71,6 @@ public class TextParser {
     private void parseContent(StringBuilder text) {
 
         if (this.textPartType != TextPartType.Root) {
-
-
             try {
                 parseName(text);
             } catch (IllegalStateException ex) {
@@ -95,9 +89,7 @@ public class TextParser {
             } catch (IllegalStateException ex) {
                 number = 0;
             }
-
         }
-
 
         //Parsuje po następnym typie
         TextPartType type = this.textPartType;
@@ -114,8 +106,7 @@ public class TextParser {
 
             m.reset();
 
-
-            List<TextPart> nextParts = new LinkedList<TextPart>();
+            List<TextPart> nextParts = new LinkedList<>();
 
             while (m.find()) {
                 nextParts.add(new TextPart(type, new StringBuilder(m.group(0))));
@@ -213,7 +204,7 @@ public class TextParser {
 
     private void normalizeLines() {
         StringBuilder tmp = new StringBuilder();
-        boolean somethingChanged = false;
+        boolean somethingChanged;
         for (int i = 0; i < contentList.size(); i++) {
             StringBuilder contentListElement = new StringBuilder(contentList.get(i));
             somethingChanged = false;
@@ -246,7 +237,7 @@ public class TextParser {
         }
     }
 
-    public static int fromRoman(StringBuilder romanNumber) {
+    public int fromRoman(StringBuilder romanNumber) {
         romanNumber = new StringBuilder(romanNumber.toString().toUpperCase());
 
         if (romanNumber.length() == 0) return 0;

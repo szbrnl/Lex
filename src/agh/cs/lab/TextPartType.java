@@ -45,8 +45,6 @@ public enum TextPartType {
 
             default:
                 throw new NotImplementedException();
-
-
         }
     }
 

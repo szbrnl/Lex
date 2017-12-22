@@ -1,7 +1,7 @@
 package agh.cs.lab;
 
 public enum Mode {
-    Help, OpenFile, TableOfContents, Content, Full, Section, Chapter, Title, Article, Articles, Paragraph, Point, LetterPoint, Preamble;
+    Help, OpenFile, TableOfContents, Content, Full, Section, Chapter, Title, Article, Articles, Paragraph, Point, LetterPoint;
 
     public TextPartType toTextPartType() {
         switch(this) {

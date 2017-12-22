@@ -11,7 +11,7 @@ public class Lex {
     public static void main(String args[]) {
 
         OptionsParser optionsParser = null;
-         
+
         try {
             optionsParser = new OptionsParser(args);
 
