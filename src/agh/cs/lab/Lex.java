@@ -11,9 +11,7 @@ public class Lex {
     public static void main(String args[]) {
 
         OptionsParser optionsParser = null;
-
-        args = new String[] {"-f", "konstytucja.txt", "-tc", "-C", "II"};
-
+         
         try {
             optionsParser = new OptionsParser(args);
 
