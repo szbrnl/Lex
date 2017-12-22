@@ -1,6 +1,5 @@
 package agh.cs.lab;
 
-
 import agh.cs.lab.cli.ParseException;
 
 import java.io.*;

@@ -81,7 +81,9 @@ public class OptionsParser {
                 selectedModeArgs.add(Mode.Full);
                 selectedModeValues.add("");
             }
-        } else throw new IllegalArgumentException("Wrong arguments");
+        } else {
+            throw new IllegalArgumentException("Wrong arguments");
+        }
 
     }
 
