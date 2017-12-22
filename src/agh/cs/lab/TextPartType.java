@@ -37,8 +37,10 @@ public enum TextPartType {
                 return number+". ";
 
             case NumParenthesisPoint:
+                return number+") ";
 
             case LetterParenthesisPoint:
+                return number+") ";
 
             default:
                 throw new NotImplementedException();
@@ -67,7 +69,7 @@ public enum TextPartType {
             "(Art\\. \\d*[a-z]*\\.)([\\s\\S]*?)(?=Art\\. \\d+[a-z]*\\.|$)",
             "(\\d{1,}\\. )([\\s\\S]*?)(?=(\\n\\d{1,}\\. |$))",
             "(\\d{1,}[a-z]*\\) )([\\s\\S]*?)(?=(\\d{1,}[a-z]*\\) |$))",
-            "([a-z]{1,}\\) )([\\s\\S]*?)(?=([a-z]{1,}\\) |$))",
+            "(?<=\\n|^)([a-z]\\) )([\\s\\S]*?)(?=(\\n[a-z]{1,}\\) |$))",
             ""
 
     );

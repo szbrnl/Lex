@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TextParser {
 
@@ -17,6 +18,7 @@ public class TextParser {
     private StringBuilder name = new StringBuilder();
     private StringBuilder title = new StringBuilder();
     private LinkedHashMap<String, TextPart> children = new LinkedHashMap<>();
+    private int number;
 
     public TextParser(TextPartType textPartType, StringBuilder text) {
         this.textPartType = textPartType;
@@ -37,13 +39,15 @@ public class TextParser {
 
     private void eraseUnnecessaryElements() {
         String[] unnecessaryElementsRegexps = new String[]{
-                "©Kancelaria Sejmu\\n2009-11-16\n?"
+                "©Kancelaria Sejmu\\n[\\S\\s]+\\n?",
+                "O\ns\nr\n2\n3\np\nN",
+                "©Kancelaria Sejmu s. \\d+/73\\n[\\S\\s]+\\n?"
         };
 
         for (String s : unnecessaryElementsRegexps) {
             Pattern r = Pattern.compile(s);
             Matcher m = r.matcher(content);
-           content = new StringBuilder(m.replaceAll(""));
+            content = new StringBuilder(m.replaceAll(""));
         }
 
     }
@@ -64,9 +68,14 @@ public class TextParser {
         return children;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
     private void parseContent(StringBuilder text) {
 
         if (this.textPartType != TextPartType.Root) {
+
 
             try {
                 parseName(text);
@@ -80,6 +89,13 @@ public class TextParser {
             } catch (IllegalStateException ex) {
                 this.title = new StringBuilder("");
             }
+
+            try {
+                parseNumber();
+            } catch (IllegalStateException ex) {
+                number = 0;
+            }
+
         }
 
 
@@ -128,6 +144,19 @@ public class TextParser {
         }
     }
 
+    private void parseNumber() {
+        if (name.toString().matches("(.*)(\\d+)(.*)")) {
+            Matcher matcher = Pattern.compile("\\d+").matcher(this.name.toString());
+            matcher.find();
+            this.number = Integer.parseInt(matcher.group(0));
+
+        } else if (name.toString().matches(".* [XIV]+")) {
+            Matcher matcher = Pattern.compile("[XIV]+").matcher(this.name.toString());
+            matcher.find();
+            this.number = fromRoman(new StringBuilder(matcher.group(0)));
+        } else this.number = 0;
+    }
+
     private void parseName(StringBuilder text) throws IllegalStateException {
         Matcher m;
         Pattern r = Pattern.compile(this.textPartType.getTextPartNameRegularExpression());
@@ -138,6 +167,8 @@ public class TextParser {
         this.name = new StringBuilder(m.group(0));
 
         text.replace(m.start(), m.end(), "");
+
+
     }
 
     private void parseTitle(StringBuilder text) throws IllegalStateException {
@@ -213,6 +244,18 @@ public class TextParser {
                 contentList.set(i, contentListElement.toString());
             }
         }
+    }
+
+    public static int fromRoman(StringBuilder romanNumber) {
+        romanNumber = new StringBuilder(romanNumber.toString().toUpperCase());
+
+        if (romanNumber.length() == 0) return 0;
+        if (romanNumber.substring(0, 1).equals("X")) return 10 + fromRoman(romanNumber.deleteCharAt(0));
+        if (romanNumber.length() >1 && romanNumber.substring(0, 2).equals("IX")) return 9 + fromRoman(romanNumber.delete(0, 2));
+        if (romanNumber.substring(0, 1).equals("V")) return 5 + fromRoman(romanNumber.delete(0, 1));
+        if (romanNumber.length() >1 && romanNumber.substring(0, 2).equals("IV")) return 4 + fromRoman(romanNumber.delete(0, 2));
+        if (romanNumber.substring(0, 1).equals("I")) return 1 + fromRoman(romanNumber.delete(0, 1));
+        throw new IllegalArgumentException("Not valid roman number");
     }
 
 

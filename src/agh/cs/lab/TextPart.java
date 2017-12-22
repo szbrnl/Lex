@@ -1,12 +1,16 @@
 package agh.cs.lab;
 
+import javax.xml.soap.Text;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TextPart {
 
     protected final String name;    //np ROZDZIAL III
     protected final String title;   //np. ŹRÓDŁA PRAWA
     protected final List<String> content; //to co zostało - np preambuła
+    protected final int number;
 
     protected TextPartType textPartType;
 
@@ -29,6 +33,7 @@ public class TextPart {
         this.name = textParser.getName();
         this.title = textParser.getTitle();
         this.content = textParser.getContent();
+        this.number = textParser.getNumber();
     }
 
     public List<String> getContent() {
@@ -38,6 +43,8 @@ public class TextPart {
     public String getName() {
         return name;
     }
+
+    public int getNumber(){ return number;}
 
     public String getTitle() {
         return title;
@@ -71,36 +78,25 @@ public class TextPart {
         return elem;
     }
 
-    public void testowa1() {
-
-        for (Map.Entry mPart : children.entrySet()) {
-            TextPart part = (TextPart) mPart.getValue();
-            System.out.println(part.textPartType.toString() + part.name + "  " + part.title);
-
-            for (Map.Entry mPart1 : part.children.entrySet()) {
-                TextPart part1 = (TextPart) mPart1.getValue();
-                System.out.println(part1.textPartType.toString() + part1.name + "  " + part1.title);
-
-                for (Map.Entry mPart2 : part1.children.entrySet()) {
-                    TextPart part2 = (TextPart) mPart2.getValue();
-                    System.out.println(part2.textPartType.toString() + part2.name + "  " + part2.title);
-
-                }
-            }
-        }
+    //Source: https://stackoverflow.com/questions/32656888/recursive-use-of-stream-flatmap
+    public List<TextPart> getAllOfType(TextPartType textPartType) {
+        Stream<TextPart> stream =  this.flatten();
+        List<TextPart> list = stream.collect(Collectors.toList());
+        return list.stream().filter(x->x.textPartType == textPartType).collect(Collectors.toList());
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TextPart textPart = (TextPart) o;
-        return Objects.equals(name, textPart.name) &&
-                textPartType == textPart.textPartType;
+    public List<TextPart> getAllAboveEqualsType(TextPartType textPartType) {
+        Stream<TextPart> stream =  this.flatten();
+        List<TextPart> list = stream.collect(Collectors.toList());
+        return list.stream().filter(x->!x.textPartType.isBelow(textPartType)).collect(Collectors.toList());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, textPartType);
+
+    private Stream flatten() {
+        return Stream.concat(
+                Stream.of(this),
+                children.values().stream().flatMap(x-> x.flatten())
+        );
     }
+
 }
