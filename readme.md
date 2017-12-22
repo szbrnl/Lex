@@ -1,4 +1,6 @@
 Instrukcja obsługi:
+0. Pomoc
+<br> ```lex -h```
 1. Wczytywanie plików
 <br>```lex -f <nazwa_pliku> <inne_opcje>```
 2. Art. 1., ust. 1: "Ustawa określa warunki..."
