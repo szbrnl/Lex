@@ -96,35 +96,36 @@ public class OptionsParser {
         if (!cmd.hasOption("h") && !cmd.hasOption("f")) {
             throw new IllegalArgumentException("File not specified");
         }
+        if(!cmd.hasOption("h")) {
+            if (cmd.hasOption("c") && cmd.hasOption("tc")) {
+                throw new IllegalArgumentException("Choose one from -c -tc");
+            }
 
-        if (cmd.hasOption("c") && cmd.hasOption("tc")) {
-            throw new IllegalArgumentException("Choose one from -c -tc");
-        }
+            if (cmd.hasOption("tc") && cmd.hasOption("Lpo")) {
+                throw new IllegalArgumentException("Cannot combine -tc -LPo");
+            }
 
-        if (cmd.hasOption("tc") && cmd.hasOption("Lpo")) {
-            throw new IllegalArgumentException("Cannot combine -tc -LPo");
-        }
+            if (cmd.hasOption("tc") && cmd.hasOption("P")) {
+                throw new IllegalArgumentException("Cannot combine -tc -P");
+            }
 
-        if (cmd.hasOption("tc") && cmd.hasOption("P")) {
-            throw new IllegalArgumentException("Cannot combine -tc -P");
-        }
+            if (cmd.hasOption("tc") && cmd.hasOption("Po")) {
+                throw new IllegalArgumentException("Cannot combine -tc -Po");
+            }
 
-        if (cmd.hasOption("tc") && cmd.hasOption("Po")) {
-            throw new IllegalArgumentException("Cannot combine -tc -Po");
-        }
+            if (cmd.hasOption("tc") && cmd.hasOption("As")) {
+                throw new IllegalArgumentException("Cannot combine -As -tc");
+            }
 
-        if (cmd.hasOption("tc") && cmd.hasOption("As")) {
-            throw new IllegalArgumentException("Cannot combine -As -tc");
-        }
+            if (cmd.hasOption("As")) {
+                String vals[] = cmd.getOptionValues("As");
+                if (vals[0].equals(vals[1]))
+                    throw new IllegalArgumentException("Wrong range argument");
+            }
 
-        if (cmd.hasOption("As")) {
-            String vals[] = cmd.getOptionValues("As");
-            if (vals[0].equals(vals[1]))
-                throw new IllegalArgumentException("Wrong range argument");
-        }
-
-        if (!cmd.hasOption("c") && !cmd.hasOption("tc")) {
-            throw new IllegalArgumentException("Mode must be specified");
+            if (!cmd.hasOption("c") && !cmd.hasOption("tc")) {
+                throw new IllegalArgumentException("Mode must be specified");
+            }
         }
     }
 
