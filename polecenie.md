@@ -25,3 +25,6 @@ Zamiana tekstu na formę obiektową.
    2. określenie specyficznych elementów składowych artykułu, np. "art. 1, ust. 1",
    3. numer rozdziału,
    4. numer działu.
+
+
+https://github.com/apohllo/obiektowe-lab/tree/master/lab8
