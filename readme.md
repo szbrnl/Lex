@@ -1,6 +1,8 @@
 Zadamie 1 - Programowanie Obiektowe (semestr III)
 Zamiana pliku .txt na formę obiektową. Program parsuje pliki konstytucja.txt/uokik.txt i pozwala uzyskać dostęp do poszczególnych elementów składowych danego pliku (artykuły, punkty, ustępy). Dodatkowo posiada możliwość wyświetlenia spisu treści danej ustawy (bądź danego elementu składowego).
 
+Oryginalne polecenie w pliku polecenie.md.
+
 Instrukcja obsługi:
 
 ```javac -encoding UTF8 ...```
