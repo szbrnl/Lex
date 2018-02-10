@@ -5,7 +5,7 @@ Oryginalne polecenie w pliku polecenie.md.
 
 Instrukcja obsługi:
 
-```javac -encoding UTF8 ...```
+```javac -encoding UTF8 ... (na Windows)```
 
 1. Pomoc
 <br> ```lex -h```
